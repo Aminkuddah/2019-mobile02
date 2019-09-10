@@ -11,46 +11,51 @@ import android.widget.Toast;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-	//  TODO: deklarasikan variabel di sini
+
 	private EditText angka;
-	private Button tebak;
+	private Button tombolTebak, tombolReset;
+	int min = 1;
+	int max = 100;
+	int randomNumber = initRandomNumber();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// TODO: bind layout di sini
+
 		angka = findViewById(R.id.number_input);
-		tebak = findViewById(R.id.guess_button);
-		Button Tebak = (Button)findViewById(R.id.guess_button);
-		Button Reset = (Button)findViewById(R.id.reset_button);
+		tombolTebak = findViewById(R.id.guess_button);
+		tombolReset = findViewById(R.id.reset_button);
 	}
 
-	// TODO: generate angka random di sini
-	private void initRandomNumber() {
-		Random r = new Random();
-		int angka = r.nextInt(100 - 0) + 0;
+	private int initRandomNumber() {
+		int random = (int) (Math.random() * ((max - min) + 1)) + min;
+		return random;
 	}
 
 	public void handleGuess(View view) {
-		// TODO: Tambahkan logika untuk melakukan pengecekan angka
-		String tebak = angka.getText().toString();
-		int angka = Integer.parseInt(tebak);
 
+		if (angka.getText().toString().equals("")) {
+			Toast.makeText(this, "tebakan harus diisi", Toast.LENGTH_SHORT).show();
+		} else {
+			int tebakAngka = Integer.parseInt(angka.getText().toString());
 
-		if(angka == angka){
-			System.out.println("tebakan anda benar");
-		}
-		else if(100 > angka){
-			System.out.println("tebakan anda terlalu besar");
-		}
-		else if(0 < angka){
-			System.out.println("tebakan anda terlalu kecil");
+			if (tebakAngka > max) {
+				Toast.makeText(this, "Tebakan anda lebih dari 100!", Toast.LENGTH_SHORT).show();
+			} else if (tebakAngka < min) {
+				Toast.makeText(this, "Tebakan anda kurang dari 1!", Toast.LENGTH_SHORT).show();
+			} else if (tebakAngka > randomNumber) {
+				Toast.makeText(this, "Tebakan anda terlalu besar!", Toast.LENGTH_SHORT).show();
+			} else if (tebakAngka < randomNumber) {
+				Toast.makeText(this, "Tebakan anda terlalu kecil!", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this, "Tebakan anda benar!", Toast.LENGTH_SHORT).show();
+				tombolReset.setEnabled(true);
+			}
 		}
 	}
 
 	public void handleReset(View view) {
-		// TODO: Reset tampilan
 		angka.setText("");
 	}
 }
